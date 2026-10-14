@@ -5,7 +5,8 @@ import sys
 import tempfile
 import shutil
 
-SHELL_BIN = os.path.abspath("./shell")
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+SHELL_BIN = os.path.join(PROJECT_ROOT, "shell")
 
 class TestRunner:
     def __init__(self):
@@ -22,8 +23,9 @@ class TestRunner:
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
-            cwd=os.getcwd()
+            cwd=PROJECT_ROOT
         )
+
         try:
             stdout, stderr = proc.communicate(input=cmd_str, timeout=timeout)
             return stdout, stderr, proc.returncode

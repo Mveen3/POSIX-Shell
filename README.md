@@ -78,11 +78,14 @@ graph TD
 │   └── terminal/             # Line editor, termios raw mode, TAB autocomplete
 │       ├── InputHandler.cpp
 │       └── Autocomplete.cpp
+├── tests/
+│   └── test_suite.py         # Automated Python verification test suite (16 tests)
+
 ├── build/                    # Object files and header dependencies (.o, .d)
 ├── Makefile                  # Build system with test & sanitize targets
-├── test_suite.py             # Automated Python verification test suite (16 tests)
 ├── TECHNICAL_REPORT.md       # In-depth systems engineering technical report
 └── README.md                 # Project documentation
+
 ```
 
 ---

@@ -178,11 +178,12 @@ Interviewers at systems companies (Qualcomm, NVIDIA, Texas Instruments) frequent
 
 ## 5. Verification & Sanitizer Results
 
-A custom Python verification harness (`test_suite.py`) verifies all 16 core functional and submodule path specifications:
+A custom Python verification harness (`tests/test_suite.py`) verifies all 16 core functional and submodule path specifications:
 
 ```
 $ make test
-python3 test_suite.py
+python3 tests/test_suite.py
+
 Running test: Echo and Pwd                               ... PASSED
 Running test: Echo Quoted String                         ... PASSED
 Running test: Semicolon Sequencing                       ... PASSED

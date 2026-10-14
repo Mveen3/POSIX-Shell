@@ -47,7 +47,8 @@ clean:
 
 # Run automated verification test suite
 test: $(TARGET)
-	python3 test_suite.py
+	python3 tests/test_suite.py
+
 
 # Build and run with AddressSanitizer & UndefinedBehaviorSanitizer
 sanitize: CXXFLAGS += -fsanitize=address,undefined
