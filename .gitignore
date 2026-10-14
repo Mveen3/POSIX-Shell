@@ -1,0 +1,14 @@
+# Build outputs
+build/
+shell
+shell_asan
+*.o
+*.d
+
+# Test artifacts and temporary files
+*.log
+__pycache__/
+test_redir_temp.txt
+test_pipe_redir_temp.txt
+test_out.txt
+.shell_history

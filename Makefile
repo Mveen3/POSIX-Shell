@@ -1,42 +1,61 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -pedantic -g
+CXXFLAGS = -std=c++11 -Wall -Wextra -pedantic -g -Iinclude
 
 # Source files
-SOURCES = main.cpp Shell.cpp Parser.cpp Builtins.cpp SystemCommands.cpp \
-          Redirection.cpp Pipeline.cpp Utils.cpp History.cpp Pinfo.cpp \
-          Search.cpp Autocomplete.cpp InputHandler.cpp Signals.cpp
+SOURCES = src/core/main.cpp \
+          src/core/Shell.cpp \
+          src/core/Signals.cpp \
+          src/core/Utils.cpp \
+          src/parser/Parser.cpp \
+          src/execution/Pipeline.cpp \
+          src/execution/Redirection.cpp \
+          src/execution/SystemCommands.cpp \
+          src/builtins/Builtins.cpp \
+          src/builtins/History.cpp \
+          src/builtins/Pinfo.cpp \
+          src/builtins/Search.cpp \
+          src/terminal/InputHandler.cpp \
+          src/terminal/Autocomplete.cpp
 
-# Object files
-OBJECTS = $(SOURCES:.cpp=.o)
+# Build directory and object files
+BUILD_DIR = build
+OBJECTS = $(patsubst src/%.cpp, $(BUILD_DIR)/%.o, $(SOURCES))
+DEPS = $(OBJECTS:.o=.d)
 
-# Dependency files
-DEPS = $(SOURCES:.cpp=.d)
-
-# Executable name
+# Target executable name
 TARGET = shell
 
 # Default target
 all: $(TARGET)
 
-# Create executable
+# Link executable
 $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS)
 
-# Include dependencies
--include $(DEPS)
-
-# Compile source files to object files and generate dependencies
-%.o: %.cpp
+# Compile source files to object files in build directory
+$(BUILD_DIR)/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 
-# Clean up
+# Include generated header dependency files
+-include $(DEPS)
+
+# Clean build artifacts
 clean:
-	rm -f $(OBJECTS) $(DEPS) $(TARGET)
+	rm -rf $(BUILD_DIR) $(TARGET)
+
+# Run automated verification test suite
+test: $(TARGET)
+	python3 test_suite.py
+
+# Build and run with AddressSanitizer & UndefinedBehaviorSanitizer
+sanitize: CXXFLAGS += -fsanitize=address,undefined
+sanitize: clean all test
 
 # Install (optional)
 install: $(TARGET)
 	cp $(TARGET) /usr/local/bin/
 
 # Phony targets
-.PHONY: all clean install
+.PHONY: all clean install test sanitize
